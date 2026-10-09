@@ -1,0 +1,273 @@
+% =============================================================================
+% referencias.bib  ---  plan de proyecto de grado
+%
+% 1) Entradas del .bib original del equipo (se restauran tal cual).
+% 2) Entradas añadidas por la reescritura del director (claves nuevas).
+%
+% biblatex no admite dos veces la misma clave. bulka2000efficient venía
+% duplicado en el .bib original: queda UNA entrada activa (la más completa)
+% y la otra comentada más abajo, sin borrar el contenido.
+% =============================================================================
+
+% -----------------------------------------------------------------------------
+% 1. Bibliografía original del equipo
+% -----------------------------------------------------------------------------
+
+@book{toro2013riemann,
+  title={Riemann solvers and numerical methods for fluid dynamics: a practical introduction},
+  author={Toro, Eleuterio F},
+  year={2013},
+  publisher={Springer Science \& Business Media}
+}
+
+@article{raman2018review,
+  title={A review on applications of computational fluid dynamics},
+  author={Raman, Ram Kumar and Dewang, Yogesh and Raghuwanshi, Jitendra},
+  journal={International Journal of LNCT},
+  volume={2},
+  number={6},
+  pages={137--143},
+  year={2018}
+}
+
+@article{berthon2005stability,
+  title={Stability of the MUSCL schemes for the Euler equations},
+  author={Berthon, Cristophe},
+  year={2005}
+}
+
+@article{jasak2009openfoam,
+  title={OpenFOAM: Open source CFD in research and industry},
+  author={Jasak, Hrvoje},
+  journal={International journal of naval architecture and ocean engineering},
+  volume={1},
+  number={2},
+  pages={89--94},
+  year={2009},
+  publisher={Elsevier}
+}
+
+@article{kong2011comparison,
+  title={Comparison of Approximate Riemann Solvers},
+  author={Kong, Charlotte},
+  journal={A dissertation of the degree of Master of Science in Mathematical and Numerical Modeling of the Atmoshere and Oceans, Department of Mathematics, University of Reading},
+  volume={75},
+  year={2011}
+}
+
+@article{mesnard2016reproducible,
+  title={Reproducible and replicable CFD: it's harder than you think},
+  author={Mesnard, Olivier and Barba, Lorena A},
+  journal={arXiv preprint arXiv:1605.04339},
+  year={2016}
+}
+
+@article{paz2019development,
+  title={Development of an Online Tool Based on CFD and Object-Oriented Programming to Support Teaching Fluid Mechanics.},
+  author={Paz, Concepci{\'o}n and Su{\'a}rez, Eduardo and Cabarcos, Adri{\'a}n and Gil, Christian},
+  journal={International Association for Development of the Information Society},
+  year={2019},
+  publisher={ERIC}
+}
+
+@inproceedings{yakimovich1999software,
+  title={Software architecture classification for estimating the cost of COTS integration},
+  author={Yakimovich, Daniil and Bieman, James M and Basili, Victor R},
+  booktitle={Proceedings of the 21st international conference on Software engineering},
+  pages={296--302},
+  year={1999}
+}
+
+@book{atkinson2005theoretical,
+  title={Theoretical numerical analysis: a functional analysis framework},
+  author={Atkinson, Kendall and Han, Weimin},
+  year={2005},
+  publisher={Springer}
+}
+
+@article{ramachandrappa2024solid,
+  title={SOLID Design Principles in Software Engineering},
+  author={Ramachandrappa, Naveen Chikkanayakanahalli},
+  journal={International Journal of Computer Trends and Technology},
+  volume={72},
+  number={9},
+  pages={18--23},
+  year={2024}
+}
+
+@inproceedings{ramakrishnan2017ten,
+  title={Ten principles for creating usable software for science},
+  author={Ramakrishnan, Lavanya and Gunter, Daniel},
+  booktitle={2017 IEEE 13th International Conference on e-Science (e-Science)},
+  pages={210--218},
+  year={2017},
+  organization={IEEE}
+}
+
+@book{gamma1994design,
+  title={Design Patterns: Elements of Reusable Object-Oriented Software},
+  author={Gamma, E. and Helm, R. and Johnson, R. and Vlissides, J.},
+  isbn={9780321700698},
+  lccn={94034264},
+  series={Addison-Wesley Professional Computing Series},
+  url={https://books.google.com.co/books?id=6oHuKQe3TjQC},
+  year={1994},
+  publisher={Pearson Education}
+}
+
+% Entrada activa de bulka2000efficient (segunda copia del .bib original, más completa).
+@book{bulka2000efficient,
+  title={Efficient C++: Performance Programming Techniques},
+  author={Bulka, D. and Mayhew, D.},
+  isbn={9780201379501},
+  lccn={99039175},
+  url={https://books.google.com.co/books?id=IR-MQiktobMC},
+  year={2000},
+  publisher={Addison-Wesley}
+}
+
+% DUPLICADO original de bulka2000efficient (misma clave; biblatex no permite las dos).
+% @book{bulka2000efficient,
+%   title={Efficient C++: performance programming techniques},
+%   author={Bulka, Dov and Mayhew, David},
+%   year={2000},
+%   publisher={Addison-Wesley Professional}
+% }
+
+@book{oberkampf2010verification,
+  title={Verification and Validation in Scientific Computing},
+  author={Oberkampf, W.L. and Roy, C.J.},
+  isbn={9781139491761},
+  url={https://books.google.com.co/books?id=7d26zLEJ1FUC},
+  year={2010},
+  publisher={Cambridge University Press}
+}
+
+% -----------------------------------------------------------------------------
+% 2. Claves nuevas de la propuesta del director (no estaban en el .bib original)
+%    jasak2009 / ramakrishnan2017 / oberkampf2010 son alias de claves ya existentes
+%    para que \parencite{jasak2009} y similares del texto vigente compilen.
+% -----------------------------------------------------------------------------
+
+@article{economon2016,
+  author  = {Economon, Thomas D. and Palacios, Francisco and Copeland, Sean R. and Lukaczyk, Trent W. and Alonso, Juan J.},
+  title   = {{SU2}: An open-source suite for multiphysics simulation and design},
+  journal = {AIAA Journal},
+  year    = {2016},
+  volume  = {54},
+  number  = {3},
+  pages   = {828--846}
+}
+
+@book{hirsch2007,
+  author    = {Hirsch, Charles},
+  title     = {Numerical computation of internal and external flows: Fundamentals of computational fluid dynamics},
+  edition   = {2},
+  publisher = {Butterworth-Heinemann},
+  year      = {2007}
+}
+
+@article{jasak2009,
+  title={OpenFOAM: Open source CFD in research and industry},
+  author={Jasak, Hrvoje},
+  journal={International journal of naval architecture and ocean engineering},
+  volume={1},
+  number={2},
+  pages={89--94},
+  year={2009},
+  publisher={Elsevier}
+}
+
+@book{leveque2002,
+  author    = {LeVeque, Randall J.},
+  title     = {Finite volume methods for hyperbolic problems},
+  publisher = {Cambridge University Press},
+  year      = {2002}
+}
+
+@article{liska2003,
+  author  = {Liska, Richard and Wendroff, Burton},
+  title   = {Comparison of several difference schemes on {1D} and {2D} test problems for the {Euler} equations},
+  journal = {SIAM Journal on Scientific Computing},
+  year    = {2003},
+  volume  = {25},
+  number  = {3},
+  pages   = {995--1017},
+  doi     = {10.1137/S1064827502402120}
+}
+
+@article{mandli2016,
+  author  = {Mandli, Kyle T. and Ahmadia, Aron J. and Berger, Marsha and Calhoun, Donna and George, David L. and Hadjimichael, Yiannis and Ketcheson, David I. and Lemoine, Grady I. and LeVeque, Randall J.},
+  title   = {Clawpack: Building an open source ecosystem for solving hyperbolic {PDEs}},
+  journal = {PeerJ Computer Science},
+  year    = {2016},
+  volume  = {2},
+  pages   = {e68},
+  doi     = {10.7717/peerj-cs.68}
+}
+
+@article{mesnard2017,
+  author  = {Mesnard, Olivier and Barba, Lorena A.},
+  title   = {Reproducible and replicable {CFD}: It's harder than you think},
+  journal = {Computing in Science \& Engineering},
+  year    = {2017},
+  volume  = {19},
+  number  = {4},
+  pages   = {44--55}
+}
+
+@book{oberkampf2010,
+  title={Verification and Validation in Scientific Computing},
+  author={Oberkampf, W.L. and Roy, C.J.},
+  isbn={9781139491761},
+  url={https://books.google.com.co/books?id=7d26zLEJ1FUC},
+  year={2010},
+  publisher={Cambridge University Press}
+}
+
+@inproceedings{ramakrishnan2017,
+  title={Ten principles for creating usable software for science},
+  author={Ramakrishnan, Lavanya and Gunter, Daniel},
+  booktitle={2017 IEEE 13th International Conference on e-Science (e-Science)},
+  pages={210--218},
+  year={2017},
+  organization={IEEE}
+}
+
+@article{stone2020,
+  author  = {Stone, James M. and Tomida, Kengo and White, Christopher J. and Felker, Kyle G.},
+  title   = {The {Athena++} adaptive mesh refinement framework: Design and magnetohydrodynamic solvers},
+  journal = {The Astrophysical Journal Supplement Series},
+  year    = {2020},
+  volume  = {249},
+  number  = {1},
+  pages   = {4}
+}
+
+@book{toro2009,
+  author    = {Toro, Eleuterio F.},
+  title     = {Riemann solvers and numerical methods for fluid dynamics: A practical introduction},
+  edition   = {3},
+  publisher = {Springer},
+  year      = {2009}
+}
+
+@article{weller1998,
+  author  = {Weller, H. G. and Tabor, G. and Jasak, H. and Fureby, C.},
+  title   = {A tensorial approach to computational continuum mechanics using object-oriented techniques},
+  journal = {Computers in Physics},
+  year    = {1998},
+  volume  = {12},
+  number  = {6},
+  pages   = {620--631}
+}
+
+@article{wilson2014,
+  author  = {Wilson, Greg and Aruliah, D. A. and Brown, C. Titus and Chue Hong, Neil P. and Davis, Matt and Guy, Richard T. and Haddock, Steven H. D. and Huff, Kathryn D. and Mitchell, Ian M. and Plumbley, Mark D. and Waugh, Ben and White, Ethan P. and Wilson, Paul},
+  title   = {Best practices for scientific computing},
+  journal = {PLoS Biology},
+  year    = {2014},
+  volume  = {12},
+  number  = {1},
+  pages   = {e1001745}
+}

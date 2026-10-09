@@ -1,0 +1,842 @@
+% Plan de proyecto de grado --- Overleaf
+% Compilar: pdfLaTeX -> biber -> pdfLaTeX (x2). minted requiere shell escape (Overleaf lo activa).
+% Marcas: AZUL = texto vigente (director) / notas de corrección menor.
+%         ROJO = borrador anterior retirado del cuerpo vigente (NO se borra).
+\documentclass[11pt,openany]{book}
+\usepackage[spanish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{amssymb}
+\usepackage{eso-pic}
+\usepackage{helvet} %Dar formato a la letra con fuentes Helvéticas
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage[doublespacing]{setspace}
+\usepackage{indentfirst}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{fancyhdr}
+\usepackage{lipsum}
+\usepackage{amsmath}
+\usepackage{amsmath,bm}
+\usepackage{minted}
+\usepackage{ragged2e}
+\usepackage{hyperref}
+\usepackage{subcaption}
+\usepackage{multirow}
+\usepackage{mfirstuc}
+\usepackage{appendix}
+\usepackage{titletoc}
+\usepackage{enumitem}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{booktabs}
+\usepackage{rotating}
+\usepackage{colortbl}
+\usepackage{xcolor}
+\usepackage[style=apa,backend=biber]{biblatex}
+\addbibresource{referencias.bib}
+\usepackage{bookmark}
+
+% --- Marcas de borrador: no se elimina texto, se distingue por color ---------
+\newcommand{\pendiente}[1]{\textcolor{red}{\textbf{[PENDIENTE: #1]}}}
+\newcommand{\corregidomenor}[1]{\textcolor{blue}{\textbf{[CORRECCIÓN MENOR: #1]}}}
+\newenvironment{textovigente}{%
+  \par\medskip
+  \noindent{\color{blue}\bfseries [TEXTO VIGENTE --- propuesta del director, integrada al plan. Las correcciones menores van anotadas en azul.]}%
+  \par\medskip
+}{\par\medskip}
+\newenvironment{borradorretirado}{%
+  \par\bigskip
+  \noindent{\color{red}\bfseries\large [BORRADOR ANTERIOR --- texto retirado del cuerpo vigente; no eliminar]}%
+  \par\medskip
+  \color{red}%
+}{%
+  \par\medskip
+  \noindent{\color{red}\bfseries [Fin del borrador anterior]}%
+  \par\bigskip
+}
+
+\graphicspath{{./figuras/}}
+
+\geometry{
+    top=2.5cm,
+    left=2.5cm,
+    right=2.5cm,
+    bottom=2.5cm
+}
+
+\pagestyle{fancy}
+
+\lhead{\leftmark} \chead{} \rhead{\thepage} % píe de página limpio
+
+\renewcommand{\headrulewidth}{0pt}
+
+\lfoot{}{} \cfoot{} \rfoot{} % píe de página limpio
+
+\rfoot{\\ \thepage}
+
+%\pagenumbering{roman}
+
+%\pagenumbering{arabic}
+
+\fancypagestyle{plain}{%
+  \fancyhf{}% Limpia el encabezado y pie de página
+  \lhead{\leftmark} \chead{} \rhead{\thepage} % píe de página limpio
+    \lfoot{}{} \cfoot{} \rfoot{}
+    \renewcommand{\headrulewidth}{0pt}% Elimina la línea de encabezado
+  \renewcommand{\footrulewidth}{0pt}% Elimina la línea de pie de página
+}
+
+\begin{document}
+\pagenumbering{arabic}
+\RaggedRight
+\setlength{\parindent}{1.27cm}
+\doublespacing
+\pagestyle{plain}
+
+\titleformat{\chapter}[display]
+{\normalfont\centering\bfseries}
+{\vspace{-17ex}}
+{0pt}{}
+[{\vspace{-5ex}}]
+
+\setcounter{secnumdepth}{0}
+\setcounter{tocdepth}{3}
+
+\titleformat{name=\section}[hang]
+{\raggedright\bfseries}{\thesection}{\vspace{}}{\vspace{0em}}
+
+\titlespacing*{\section}{0pt}{\baselineskip}{\baselineskip}
+
+\titleformat{name=\subsection}[hang]
+{\raggedright\bfseries\itshape}{\thesubsection}{0.5em}{}
+
+\titlespacing*{\subsection}{0pt}{\baselineskip}{\baselineskip}
+
+\titleformat{\subsubsection}[runin]
+  {\normalfont\bfseries}{\thesubsubsection.}{3pt}{}
+\titlespacing{\subsubsection}
+  {1.27cm}{0.5em}{\wordsep}
+
+\renewcommand{\thesubsubsection}{\Alph{subsubsection}}
+
+\begin{titlepage}
+    \thispagestyle{fancy}
+    \lhead{\leftmark} \chead{} \rhead{\thepage} % píe de página limpio
+    \lfoot{}{} \cfoot{} \rfoot{}
+    \centering
+    {\large Plan de proyecto de grado \par}
+    \vfill
+    {\large Framework computacional para la simulación de la dinámica de fluidos mediante el método de volúmenes finitos y esquemas de alta resolución para la captura de choques \par}
+    \vfill
+    {\large Gabriel Antonio Chavarro Avellaneda \par}
+    {\large Edgar Santiago Ariza Garcia \par}
+    \vfill
+    {\large Director \par}
+    {\large Dr. Jorge Villamizar Morales \par}
+    \vfill
+    {\large Codirectores \par}
+    {\large Ph.D. Lola Xiomara Bautista Rozo \par}
+    {\large M.Sc. Oswaldo Alonso Nieto Narvaez \par}
+    \vfill 
+    {\large Universidad Industrial de Santander \par}
+    {\large Facultad de Ingenierías Fisicomecánicas \par}
+    {\large Escuela de Ingeniería de Sistemas e Informatica\par}
+    {\large Ingeniería de Sistemas\par}
+    {\large Bucaramanga, Santander \par}
+    {\large 2026 \par}
+\end{titlepage}
+\thispagestyle{empty}
+
+\newpage
+
+
+
+\renewcommand{\contentsname}{Contenido}
+\doublespacing
+\titlecontents{chapter} [0pt]{\addvspace{1pc}\bfseries}{}{}{\hfill\contentspage}
+\tableofcontents
+\singlespacing
+
+\newpage
+
+\doublespacing
+
+\chapter{Justificación y/o Planteamiento del Problema}
+
+\thispagestyle{fancy}
+\fancyhf{}
+  \lhead{JUSTIFICACIÓN Y/O PLANTEAMIENTO DEL PROBLEMA} \chead{} \rhead{\thepage}
+    \lfoot{}{} \cfoot{} \rfoot{}
+    \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+
+% =============================================================================
+\begin{textovigente}
+
+\subsection*{Planteamiento del problema}
+
+Las ecuaciones de Euler de la dinámica de gases, que modelan un fluido
+compresible no viscoso y sin conducción de calor, constituyen el sistema
+hiperbólico de leyes de conservación sobre el cual se desarrollan y evalúan los métodos numéricos para flujos
+compresibles con ondas de choque, ondas de rarefacción y discontinuidades de
+contacto \parencite{leveque2002,toro2009}. Sus soluciones pueden desarrollar
+discontinuidades aun cuando los datos iniciales sean suaves,
+por lo que su aproximación requiere el uso de métodos conservativos de captura de choques: volúmenes finitos con solvers de Riemann
+aproximados, reconstructores de alta resolución y tratamientos no oscilatorios
+\parencite{hirsch2007,toro2009}.
+\corregidomenor{Se corrigió el typo ``cmétodos'' $\rightarrow$ ``métodos''. Se unificó Toro a la 3.\textsuperscript{a} ed.\ (2009), clave \texttt{toro2009}.}
+La calidad de la solución no depende de una sola
+elección, sino de la combinación entre reconstrucción, solver de Riemann e
+integrador temporal. Por esta razón, comparar el efecto de cada una exige evaluarlas
+bajo condiciones idénticas, como se hace en los estudios comparativos sobre
+problemas de prueba estándar \parencite{liska2003}.
+
+Existen códigos que implementan estos métodos. Algunos son de propósito
+general, como OpenFOAM \parencite{jasak2009,weller1998}, SU2 \parencite{economon2016} o
+el paquete comercial ANSYS Fluent; otros son \textit{frameworks} abiertos
+para leyes de conservación hiperbólicas, como Clawpack \parencite{mandli2016} o
+Athena++ \parencite{stone2020}, en los que el solver de Riemann puede
+intercambiarse. Sin embargo, su generalidad (mallas no estructuradas o
+refinamiento adaptativo, múltiples modelos físicos, modelos de turbulencia entre otros) y
+su tamaño hacen que, para quien debe estudiar, verificar o prototipar un método
+numérico específico, el principal costo sea la curva de aprendizaje de una base
+de código grande y la dificultad de aislar el efecto de un único componente.
+
+Además, diversos estudios han señalado que reproducir los resultados de una simulación
+puede ser difícil, aun cuando el código y los datos sean públicos \parencite{mesnard2017}. También, muchos códigos
+desarrollados para investigación se crean para resolver problemas específicos, dificultando su mantenimiento, modificación
+y ampliación \parencite{ramakrishnan2017,wilson2014}. De esta manera, la verificación del código, entendida como
+comprobar que se resuelven correctamente las ecuaciones \parencite{oberkampf2010}, requiere además soluciones de referencia, normas de
+error y estudios de convergencia que conviene incorporar desde el diseño y no
+como un añadido posterior.
+\corregidomenor{Mesnard y Barba: el artículo de \textit{Computing in Science \& Engineering} es 2017 (no 2016). Se usó ``aun cuando'' (concesivo), no ``aún cuando''. Se mantuvo biblatex/biber del plan original; no se cambió a natbib.}
+
+Se identifica así la necesidad de un \textit{framework} compacto, legible y
+modular, escrito en C++ moderno, para las ecuaciones de Euler en una y dos
+dimensiones sobre mallas cartesianas, en el que la reconstrucción, el solver de
+Riemann y el integrador temporal puedan seleccionarse por configuración sin
+recompilar, y que incluya herramientas de verificación integradas. Su propósito
+es doble: servir de banco de pruebas para cuantificar el
+efecto de cada combinación de esquemas, y servir de recurso didáctico que
+conecte la formulación matemática con su implementación.
+
+\medskip
+\noindent\textit{Pregunta de investigación.} ¿Es posible diseñar e implementar
+un \textit{framework} en C++ para las ecuaciones de Euler 1D y 2D en el que
+reconstrucciones (constante, MUSCL, WENO), solvers (HLLE, HLLC) e integrador
+Runge--Kutta SSP sean intercambiables por configuración, y que permita
+cuantificar, mediante normas de error y orden de convergencia, el efecto de cada
+combinación sobre la captura de choques y discontinuidades de contacto, con
+resultados reproducibles?
+
+\pendiente{Alinear esta pregunta con los objetivos específicos vigentes (más abajo). El OE2 recortado no lista WENO ni HLLE. O se amplían los objetivos, o se estrecha la pregunta (p.\ ej.\ HLL/HLLC + MUSCL en 1D, con 2D/WENO/HLLE como extensión). No se reescribe aquí para no adelantar esa decisión del equipo.}
+
+% -----------------------------------------------------------------------------
+\subsection*{Justificación}
+
+\textit{Desde el punto de vista numérico}, el banco de pruebas permite estudiar
+el compromiso entre resolución de contactos y robustez que distingue a HLLC de
+HLLE, y el efecto del orden de reconstrucción, de manera controlada y con un
+único código. \textit{Desde el punto de vista pedagógico}, un código pequeño y
+documentado permite trazar cada paso de la discretización, desde la forma
+integral de las ecuaciones hasta el flujo numérico en cada interfaz, con fines
+de enseñanza de métodos numéricos y de dinámica de fluidos computacional
+(CFD). \textit{Desde el punto de vista de la ingeniería de software}, el
+proyecto aplica principios de diseño (responsabilidad única, abierto/cerrado,
+inversión de dependencias) y patrones (\textit{Strategy}, \textit{Factory}) a
+un problema científico real, con control de versiones, pruebas automáticas y
+documentación, de modo que el producto sea extensible, por ejemplo hacia otros
+sistemas de ecuaciones o hacia estrategias de paralelización.
+
+% -----------------------------------------------------------------------------
+\subsection*{Delimitación}
+
+El trabajo se limita a las ecuaciones de Euler para gas ideal, sin viscosidad ni
+conducción de calor, en una y dos dimensiones sobre mallas cartesianas
+uniformes. Quedan fuera las ecuaciones de Navier--Stokes, la turbulencia, las
+geometrías complejas, los mallados no estructurados, las tres dimensiones y la
+paralelización, que se contemplan como trabajo futuro.
+
+\end{textovigente}
+% =============================================================================
+
+\begin{borradorretirado}
+
+La dinámica de fluidos computacional (CFD) es un pilar importante en ingeniería y ciencias físicas \parencite{raman2018review}, ya que permite simular fenómenos complejos como ondas de choque y flujos turbulentos mediante la resolución numérica de ecuaciones como las de Euler \parencite{toro2013riemann}, la precisión de estas simulaciones depende críticamente de la elección de algoritmos numéricos discretos (reconstructores \parencite{berthon2005stability}, solvers de Riemann, esquemas temporales), por ello, comprender el impacto de cada elección algorítmica no es un detalle de implementación, sino un requisito para la investigación rigurosa y el diseño confiable.
+
+No obstante, persiste una brecha estructural entre la formulación teórica de los métodos numéricos y su implementación computacional efectiva. Los paquetes de Dinámica de Fluidos Computacional (CFD) predominantes como ANSYS Fluent, o los entornos de código abierto tales como OpenFOAM \parencite{jasak2009openfoam} y SU2, a pesar de su robustez y madurez tecnológica, suelen operar en la práctica como arquitecturas algorítmicas abstractas.
+
+En estos sistemas, los módulos fundamentales: discretización espacial, resolución del problema de Riemann, tratamiento de términos fuente, integración temporal, acoplamiento presión-velocidad y estructuras de datos se encuentran fuertemente integrados dentro de esquemas de software monolíticos o altamente abstractos. Esta encapsulación, aunque ventajosa desde el punto de vista industrial y de rendimiento, introduce una pérdida significativa de trazabilidad matemática entre el modelo continuo y su realización discreta.
+
+Como consecuencia, emergen al menos cuatro problemáticas centrales:
+
+\begin{itemize}
+    \item Imposibilita modificar o comparar algoritmos (por ejemplo: cambiar un solver de Riemann HLLE por HLLC \parencite{kong2011comparison}) sin un esfuerzo de reingeniería considerable (Opacidad Investigativa).
+    \item Dificulta la verificación independiente de los resultados, ya que no se puede auditar cada paso del cálculo (Irreproducibilidad) \parencite{mesnard2016reproducible}.
+    \item Los estudiantes no pueden trazar una línea clara entre la ecuación discretizada en el pizarrón y su ejecución en el computador (Barrera Pedagógica) \parencite{paz2019development}.
+    \item Para un investigador que prueba un nuevo método, el mayor costo de tiempo no está en la teoría, sino en integrarla en un código existente (Ineficiencia en I+D) \parencite{yakimovich1999software}.
+\end{itemize}
+
+Con base en lo anterior, se identifica la necesidad de un framework que permita una configuracion personalizable y accesible, de este modo la herramienta puede funcionar como un banco de pruebas para validar y comparar los resultados obtenidos cambiando de solvers, así como un laboratorio pedagógico para enseñar CFD desde sus fundamentos computacionales
+
+¿Cómo diseñar un framework computacional basado en el método de volúmenes finitos que permita la comparación y validación de distintos metodos, como los solvers de Riemman HLLE y HLLC?
+
+Este proyecto de grado aborda este vacío proponiendo el desarrollo de un framework modular desde sus cimientos. La justificación técnica se sustenta en tres pilares:
+
+\begin{itemize}
+    \item Aplicación de principios de diseño%(SOLID, patrones de diseño) 
+    \phantom{} para lograr un desacoplamiento real entre módulos, permitiendo que cada componente sea desarrollado, probado y reemplazado de forma independiente (Arquitectura de Software) \parencite{ramachandrappa2024solid}. 
+    \item Uso de C++ como lenguaje principal para implementar un núcleo computacional eficiente en las operaciones de malla y álgebra propias del método de volúmenes finitos. Se prioriza un diseño limpio y modular que permita, en una fase posterior, incorporar estrategias de paralelización (como OpenMP) sin necesidad de reestructurar el código. Esta aproximación garantiza que el framework pueda ejecutar simulaciones 2D con un tiempo de ejecución razonable para fines de validación y experimentación, manteniendo la legibilidad y extensibilidad como ejes fundamentales (Rendimiento y Control) \parencite{bulka2000efficient}.
+    \item Desarrollo no solo de resultados físicos correctos, sino un artefacto de software documentado, versionado y abierto, que priorice la mantenibilidad y la extensibilidad, cerrando así la brecha entre un “script de investigación” y una “herramienta ingenieril” (Ciclo de Vida del Software Científico) \parencite{ramakrishnan2017ten}.
+\end{itemize}
+
+\end{borradorretirado}
+
+\newpage
+
+\doublespacing
+
+\titleformat{name=\chapter}[display]
+{\normalfont\centering\bfseries}{\chaptertitlename\ \thechapter}{20pt}{}
+
+\pagestyle{plain}
+
+\chapter{Objetivos}
+
+\section{Objetivo General}
+
+Diseñar e implementar un framework computacional modular mediante los métodos de volúmenes finitos y de alta resolución de simulaciones de dinámica de fluidos, que permita la elaboración de un banco de pruebas y validación de esquemas numéricos y que garantice la reproducibilidad de resultados.
+
+\newpage
+
+\section{Objetivos Específicos}
+
+\begin{itemize}{\color{red}
+    % \item Diseñar una arquitectura de software modular para el framework, fundamentada en principios de diseño orientado a objetos y patrones estructurales, que desacople los componentes numéricos fundamentales (malla, reconstructor, solver de Riemann, integrador temporal) mediante interfaces bien definidas. Como producto de este objetivo se obtendrá un diagrama de componentes con sus contratos de interfaz, y un mecanismo de configuración que permita orquestar y combinar distintos esquemas numéricos sin modificar el código fuente.
+
+    \item  Diseñar una arquitectura de software modular para el framework, fundamentada en principios de diseño orientado a objetos y patrones estructurales, que permita desacoplar los componentes numéricos fundamentales mediante interfaces bien definidas.
+
+    \item Implementar en C++ el núcleo computacional del framework para la resolución numérica de las ecuaciones de Euler mediante el método de volúmenes finitos en dominios estructurados unidimensionales y bidimensionales, incorporando diferentes esquemas de reconstrucción, solvers de Riemann y métodos de integración temporal.
+
+    \item Validar la precisión y el comportamiento numérico del framework mediante la simulación de problemas de referencia para las ecuaciones de Euler en dominios unidimensionales y bidimensionales.
+
+    \item Elaborar documentación técnica y pedagógica del framework que facilite su desarrollo, extensión, instalación y utilización como herramienta de apoyo para la enseñanza de dinámica de fluidos computacional.
+    
+    % \item Implementar en C++ el núcleo computacional del framework sobre dominios estructurados 1D y 2D, que comprenda: una malla computacional para ambas dimensiones, la formulación conservativa de las ecuaciones de Euler mediante el método de volúmenes finitos, tres esquemas de reconstrucción (orden 1 constante, orden 2 MUSCL y orden 3+ WENO), al menos dos solvers de Riemann aproximados (HLLE y HLLC), y un esquema de integración temporal explícito con control de paso de tiempo mediante la condición CFL. La implementación priorizará la corrección, la claridad del código y la modularidad como base para extensiones futuras.
+
+    % \item Validar la corrección física del framework mediante la simulación de un conjunto de problemas de Riemann estandarizados en 1D (incluyendo el problema de Sod como caso de referencia base) y al menos un caso en 2D. Los resultados se cuantificarán con las normas de error L1 y L2 frente a soluciones analíticas o de referencia de alta fidelidad, y se utilizarán para demostrar explícitamente el impacto de distintas combinaciones de reconstructor y solver sobre la precisión y el comportamiento numérico en un mismo problema.
+
+    % \item Elaborar una documentación dual que comprenda: una documentación técnica dirigida a desarrolladores, con descripción de la arquitectura, las interfaces de programación y guías de extensión del código; y una documentación de usuario de carácter pedagógico, que incluya un manual de instalación, tutoriales progresivos desde casos 1D hasta casos 2D, y archivos de configuración de ejemplo para cada caso de prueba, facilitando la adopción del framework como herramienta de enseñanza de CFD desde sus fundamentos computacionales.
+    
+\end{itemize}
+
+\chapter{Marco Teorico}
+
+La organizacion del marco teorico se manejara en los siguientes pilares:
+
+\begin{enumerate}
+
+    \item Fundamentos de la Mecánica de Fluidos Computacional
+    \item Método de Volúmenes Finitos
+    \item Solvers de Riemann Aproximados
+    \item Arquitectura de Software para Computación Científica
+    \item Ecosistema Tecnológico y Herramientas
+    \item Métricas de Verificación y Validación
+
+\end{enumerate}
+
+    \subsection{1. Fundamentos de la Mecánica de Fluidos Computacional}
+
+    La Dinámica de Fluidos Computacional (CFD, por sus siglas en inglés \textit{Computational Fluid Dynamics}) es la rama de la mecánica de fluidos que estudia el comportamiento de fluidos en movimiento mediante la resolución numérica de las ecuaciones que gobiernan dichos fenómenos. A diferencia de los enfoques analíticos, cuya aplicabilidad se restringe a geometrías simples y condiciones idealizadas, la CFD permite abordar problemas de alta complejidad física como flujos turbulentos, interacciones fluido-estructura y propagación de ondas de choque \parencite{raman2018review}. Su relevancia abarca desde el diseño aeronáutico y la ingeniería de procesos hasta la simulación de fenómenos atmosféricos y astrofísicos.
+
+        \subsubsection{1.1. Las Ecuaciones de Euler}\textbf{}
+
+        El modelo físico central de este proyecto son las ecuaciones de Euler, que describen el movimiento de un fluido compresible no viscoso en ausencia de conducción de calor. En su forma vectorial conservativa, estas ecuaciones se expresan como:
+
+        \begin{equation}
+        \frac{\mathbf{\partial U}}{\mathbf{\partial t}} + \mathbf{\nabla \cdot F(U) = 0}
+        \end{equation}
+
+        donde $\mathbf{U}$ es el vector de variables conservadas, densidad $\rho$, cantidad de movimiento $\rho \mathbf{v}$ y energía total $E$ y $\mathbf{F}(\mathbf{U})$ es el tensor de flujos físicos asociado. La formulación conservativa no es una elección arbitraria: garantiza que las leyes de conservación de masa, momento y energía se satisfagan de forma discreta, lo cual es indispensable para capturar correctamente la posición y velocidad de discontinuidades como las ondas de choque \parencite{toro2013riemann}. Trabajar con variables conservadas en lugar de primitivas (presión, velocidad, temperatura) es precisamente lo que permite que los métodos numéricos basados en estas ecuaciones sean robustos ante soluciones discontinuas.
+
+        \subsubsection{1.2. Fenómenos de Interés: Ondas y Discontinuidades}\textbf{}
+
+        La solución de las ecuaciones de Euler en presencia de datos discontinuos da lugar a tres tipos fundamentales de estructuras ondulatorias, cuya captura precisa constituye el principal desafío numérico del proyecto:
+
+        \begin{itemize}
+            \item \textbf{Ondas de choque (shocks): }Discontinuidades en las que las variables conservadas experimentan un salto abrupto. Son el resultado de la compresión supersónica del fluido y su correcta representación numérica exige esquemas capaces de evitar oscilaciones espurias en su vecindad.
+            \item \textbf{Ondas de rarefacción: }Regiones de expansión suave del fluido donde las variables varían de forma continua. Aunque no son discontinuidades, su interacción con otras estructuras las hace relevantes para la validación numérica.
+            \item \underline{\textbf{Discontinuidades  de contacto: }Superficies a través de las cuales la presión y la velocidad son} \underline{continuas, pero la densidad experimenta un salto. Su captura precisa es uno de los criterios} \underline{diferenciadores entre los solvers de Riemann aproximados que este proyecto implementa y compara.}
+        \end{itemize}
+
+        \subsubsection{1.3. El Problema de Riemann}\textbf{}
+
+        El problema de Riemann es el problema de valores iniciales formado por las ecuaciones de Euler con datos iniciales constantes a ambos lados de una única discontinuidad. Formalmente, dados dos estados $\mathbf{U}_L$ y $\mathbf{U}_R$, separados en $x = 0$, la solución evoluciona produciendo exactamente las tres estructuras descritas en la sección anterior. Este problema ocupa un lugar central en la CFD compresible por dos razones: primero, su solución exacta es conocida para las ecuaciones de Euler y sirve como referencia analítica para la verificación numérica, aunque su cálculo requiere un procedimiento iterativo no lineal que resulta costoso en la práctica; segundo, el método de volúmenes finitos resuelve un problema de Riemann local en cada interfaz de la malla en cada paso de tiempo, por lo que la calidad del solver utilizado determina directamente la precisión global de la simulación \parencite{toro2013riemann}. Esta segunda razón motiva el desarrollo de los solvers aproximados que se describen en el Pilar 3.\textbf{}
+
+\subsection{2. Método de Volúmenes Finitos}
+
+\subsubsection{2.1. Principio General}\textbf{}
+
+El método de volúmenes finitos (FVM, por sus siglas en inglés *Finite Volume Method*) es la técnica de discretización predominante en CFD compresible debido a su capacidad natural para satisfacer leyes de conservación de forma discreta. A diferencia del método de diferencias finitas, que discretiza directamente las derivadas de las ecuaciones, el FVM parte de la forma integral de las ecuaciones de conservación. Integrando la ecuación de Euler sobre una celda de control $\mathbf{\Omega_i}$ de volumen $\mathbf{|\Omega_i|}$ y aplicando el teorema de la divergencia, se obtiene:
+
+\begin{equation}
+    \mathbf{\frac{dt}{dU_i} = - \frac{1}{\lvert \Omega_i \rvert}\int_{\partial\Omega_i}^{}F(U)\cdot \hat{n}dS}
+\end{equation}
+
+donde $\mathbf{U_i}$ es el promedio de las variables conservadas en la celda i, $\partial\Omega_i$ es su frontera y $\hat{n}$ es el vector normal unitario exterior. Esta formulación convierte el problema continuo en un sistema de ecuaciones ordinarias para los promedios celulares, donde la única incógnita restante es cómo aproximar el flujo en cada interfaz entre celdas.
+
+\subsubsection{2.2. Flujos Numéricos en las Interfaces}\textbf{}
+
+La evaluación del flujo en la interfaz entre dos celdas adyacentes $i$ e $i+1$ es el núcleo del método. Dado que los promedios celulares $\mathbf{U_i}$ y $\mathbf{U_{i+1}}$ son en general distintos, existe una discontinuidad en cada interfaz que define naturalmente un problema de Riemann local. El flujo numérico $\mathbf{\hat{F}_{i+\frac{1}{2}}}$ se obtiene entonces como la solución (exacta o aproximada) de ese problema de Riemann, razón por la cual la elección del solver tiene un impacto directo sobre la precisión y robustez de toda la simulación. La semidiscretización del sistema queda:
+
+\begin{equation}    \boldsymbol{\frac{dU_i}{dt} = -\frac{1}{\lvert \Omega_i \rvert}(\hat{F}_{i + \frac{1}{2}} - \hat{F}_{i - \frac{1}{2}})}
+\end{equation}
+
+\begin{figure}[htbp]
+    \centering   \includegraphics[width=1\linewidth]{figuras/cubo.png}
+    \caption{Interpretacion grafica}
+    \label{Descricion grafica}
+\end{figure}
+
+\subsubsection{2.3. Condiciones de Contorno}\textbf{}
+
+Toda simulación sobre un dominio finito requiere especificar cómo se comporta el fluido en los límites de la malla. Las condiciones de contorno determinan qué valores se asignan a las celdas fantasma (ghost cells) ubicadas fuera del dominio, que son las celdas ficticias que el método de volúmenes finitos utiliza para evaluar los flujos numéricos en las interfaces del borde. El framework implementa las tres condiciones más comunes en CFD compresible:
+
+\begin{itemize}
+    \item \textbf{Transmisiva (outflow): }La celda fantasma copia el valor de la celda interior adyacente. Modela una salida libre donde el fluido abandona el dominio sin reflexión, y es la condición más utilizada en los problemas de Riemann estándar.
+    \item \textbf{Reflectiva: }La celda fantasma copia las variables escalares (densidad, presión) de la celda interior pero invierte la componente normal de la velocidad. Modela una pared sólida impermeable y es necesaria para casos como la reflexión de Mach en 2D.
+    \item \textbf{Periódica: }La celda fantasma en un extremo del dominio toma el valor de la celda real en el extremo opuesto. Modela dominios que se repiten espacialmente y es útil para verificar la conservación global del esquema en ausencia de efectos de borde.
+\end{itemize}
+
+\subsubsection{2.4. Reconstrucción y Alta Resolución}\textbf{}
+
+Un esquema de primer orden toma directamente $\mathbf{U_i}$ como el valor en ambas caras de la celda $i$. Este enfoque es robusto pero excesivamente disipativo: difumina las discontinuidades en lugar de capturarlas con nitidez. Para alcanzar alta resolución, se introduce una etapa de reconstrucción, en la que se construye un polinomio local dentro de cada celda para estimar los valores en las interfaces con mayor precisión.
+
+Los tres esquemas de reconstrucción que implementa este framework son:
+
+\begin{itemize}
+    \item \textbf{Reconstrucción constante (orden 1): }El valor en ambas caras de la celda es simplemente el promedio celular $\mathbf{U_i}$. Sirve como referencia base para comparar el impacto de esquemas de mayor orden.
+    \item \textbf{MUSCL (orden 2): }Acrónimo de Monotone Upstream-centered Schemes for Conservation Laws, propuesto por Van Leer (1979). Construye una reconstrucción lineal dentro de cada celda usando las diferencias entre celdas vecinas, elevando el orden de precisión espacial a dos.
+    \item \textbf{WENO (orden 3 o superior): } Acrónimo de Weighted Essentially Non-Oscillatory, introducido por Liu, Osher y Chan (1994). Construye la reconstrucción como una combinación ponderada de varios stencils, asignando menor peso a aquellos que cruzan discontinuidades. Esto permite alcanzar orden alto de precisión en regiones suaves sin generar oscilaciones cerca de los choques.
+\end{itemize}
+
+\subsubsection{2.5. Limitadores de Pendiente}\textbf{}
+
+La reconstrucción de orden superior introduce el riesgo de generar valores no físicos u oscilaciones cerca de discontinuidades. Para evitarlo, los esquemas MUSCL incorporan limitadores de pendiente, funciones que restringen la reconstrucción lineal para satisfacer condiciones de monotonía o de variación total decreciente (TVD, Total Variation Diminishing). Los limitadores más utilizados en la literatura son minmod, Van Leer y superbee, cada uno con un balance distinto entre disipación numérica y resolución de discontinuidades \parencite{toro2013riemann}
+
+\subsubsection{2.6. Integración Temporal}\textbf{}
+
+La semidiscretización del sistema produce un conjunto de ecuaciones diferenciales ordinarias en el tiempo, que se integran mediante esquemas explícitos. El framework implementa métodos de Runge-Kutta de orden 2 o superior. Un elemento crítico de la integración temporal explícita es la condición de Courant-Friedrichs-Lewy (CFL), que impone una restricción sobre el paso de tiempo $\mathbf{\Delta t}$ en función del tamaño de celda $\mathbf{\Delta x}$ y la velocidad máxima de propagación de información $\mathbf{S_{max}}$:
+
+\begin{equation}
+    \mathbf{\Delta t \leq C_{CFL} \cdot \frac{\Delta x}{S_{max}}}
+\end{equation}
+
+donde $\mathbf{C_{CFL} \leq 1}$ es el número de CFL. Esta condición garantiza la estabilidad del esquema y tiene una interpretación física directa: la información no puede viajar más de una celda por paso de tiempo.
+
+\subsection{3. Solvers de Riemann Aproximados}
+
+Cuando se estableció en el Pilar 2, el método de volúmenes finitos requiere evaluar un flujo numérico en cada interfaz de la malla resolviendo un problema de Riemann local. Como se anticipó en el Pilar 1, la solución exacta del problema de Riemann existe pero su cálculo implica un procedimiento iterativo no lineal que resulta computacionalmente costoso cuando se ejecuta millones de veces sobre una malla durante una simulación \parencite{toro2013riemann}. Esta realidad motivó el desarrollo de los solvers de Riemann aproximados: métodos que estiman el flujo en la interfaz de forma directa y no iterativa, sacrificando una fracción de precisión a cambio de una reducción significativa en el costo computacional. Los solvers implementados en este framework pertenecen a la familia HLL, propuesta originalmente por Harten, Lax y Van Leer (1983), y sus extensiones más relevantes.
+
+\subsubsection{3.1. Solver HLL}\textbf{}
+
+El solver HLL (Harten, Lax y Van Leer, 1983) es el punto de partida de la familia. Su idea central es aproximar la estructura de la solución del problema de Riemann mediante solo dos velocidades de onda, $S_L$ y $S_R$, que delimitan una región intermedia única. El flujo numérico en la interfaz se calcula como:
+
+\begin{equation}
+    \frac{\hat{F}^{HLL} = S_{R}F_{L} - S_{L}F_{R} + S_{L}S_{R}(U_{R} - U_{L})}{S_{R} - S_{L}}
+\end{equation}
+
+donde $F_{L}$ y $F_{R}$ son los flujos físicos evaluados en los estados izquierdo y derecho respectivamente. La fortaleza del HLL es su robustez: al usar solo dos ondas, el esquema es positivo y estable en una amplia gama de condiciones. Su debilidad principal es que al colapsar toda la estructura intermedia en un único estado promedio, la discontinuidad de contacto queda completamente difuminada, produciendo perfiles de densidad excesivamente suavizados en problemas donde esta estructura es relevante.
+
+\subsubsection{3.2. Solver HLLE}\textbf{}
+
+El solver HLLE es una variante del HLL que incorpora la estimación de velocidades de onda propuesta por Einfeldt (1988). La diferencia no está en la estructura del flujo numérico, que mantiene la forma del HLL, sino en cómo se calculan $S_{L}$ y $S_{R}$. Einfeldt propuso estimaciones basadas en promedios de Roe de las variables primitivas, lo que produce velocidades de onda más precisas y garantiza propiedades de positividad del esquema incluso en condiciones extremas como flujos de baja densidad o alta velocidad. El HLLE es por tanto el miembro más robusto de la familia y sirve como referencia de estabilidad en el banco de pruebas del framework.
+
+\subsubsection{3.3. Solver HLLC}\textbf{}
+
+El solver HLLC (*Contact*, Toro, Spruce y Speares, 1994) es la extensión más importante del HLL para las ecuaciones de Euler. La letra **C** hace referencia explícita a la onda de contacto que el HLL original ignora. Para recuperarla, el HLLC introduce una tercera velocidad de onda $S^*$, la velocidad de la discontinuidad de contacto, dividiendo la región intermedia en dos subestados $U_{L}^*$ y $U_{R}^*$. El flujo numérico se evalúa entonces como:
+
+\begin{equation}
+    \hat{F}^{HLLC} = 
+    \begin{cases}
+        F_{L} &\quad\text{si } 0 \leq S_{L}\\
+        F_{L}^{*} = F_{L} + S_{L}(U_{L}^{*} - U_{L}) &\quad\text{si } S_{L} \leq 0 \leq S^{*}\\
+        F_{R}^{*} = F_{R} + S_{R}(U_{R}^{*} - U_{R}) &\quad\text{si } S^{*} \leq 0 \leq S_{R}\\
+        F_{R} &\quad\text{si } 0 \ge S_{L}
+    \end{cases}
+\end{equation}
+
+Esta estructura de tres ondas permite al HLLC capturar discontinuidades de contacto con una nitidez significativamente mayor que el HLL o el HLLE, a un costo computacional apenas superior. Por esta razón, el HLLC es actualmente el solver de referencia en la mayoría de los códigos modernos de CFD compresible \parencite{toro2013riemann}.
+
+\subsubsection{3.4. Comparación entre Solvers}\textbf{}
+
+La siguiente tabla sintetiza las propiedades principales de los tres solvers implementados en el framework, y constituye la base conceptual del banco de pruebas que el proyecto propone:
+
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    \hline\textbf{Propiedad} & \textbf{HLL} & \textbf{HLLE} & \textbf{HLLC} \\
+    \hline Ondas modeladas & 2 & 2 & 3 \\
+    \hline Captura onda de contacto & No & No & Si \\
+    \hline Estimación de velocidades de onda & Simple & Einfeldt & Einfeldt $+ \text{ }  S^{*}$ \\
+    \hline Difusión numérica en densidad & Alta & Alta & Moderada \\
+    \hline Robustez en condiciones extremas & Alta & Muy Alta & Alta \\
+    \hline
+    \end{tabular}
+    \caption{Comparativa de Solvers}
+    \label{tab:name}
+\end{table}
+
+La comparación sistemática de estos solvers sobre los mismos problemas de prueba, manteniendo fijos el reconstructor y el integrador temporal, es precisamente lo que el framework hace posible y que los paquetes monolíticos existentes dificultan.
+
+\subsection{4. Arquitectura de Software para Computación Científicas}
+
+El software científico ocupa un lugar particular dentro de la ingeniería de software. Históricamente, los códigos de simulación numérica han sido desarrollados por investigadores cuya formación principal es física o matemática, lo que ha producido una cultura de desarrollo orientada a obtener resultados correctos lo antes posible, frecuentemente a costa de la mantenibilidad, la extensibilidad y la reproducibilidad del código \parencite{ramakrishnan2017ten}. El resultado característico es lo que se conoce como un script de investigación: un programa que funciona para el problema para el que fue escrito, pero que resulta opaco, frágil y difícil de modificar para cualquier otro propósito.
+Este proyecto adopta una postura distinta: el framework no es solo un medio para obtener resultados físicos, sino un artefacto de software diseñado con criterios de ingeniería, donde la arquitectura es una decisión de primer orden tan importante como la elección del esquema numérico.
+
+\subsubsection{4.1. Principios de Diseño Aplicados}\textbf{}
+
+El diseño del framework se fundamenta en principios consolidados de la ingeniería de software, aplicados al contexto específico de la computación científica:
+
+\begin{itemize}
+    \item \textbf{Principio de Responsabilidad Única (SRP):} Cada módulo del framework tiene una única razón para cambiar. La malla no conoce los solvers, el solver no conoce el integrador temporal, y el integrador no conoce la física del problema. Esta separación garantiza que modificar un componente no introduzca efectos inesperados en los demás.
+    \item \textbf{Principio de Abierto/Cerrado (OCP):} El sistema está abierto para extensión pero cerrado para modificación. Agregar un nuevo solver de Riemann o un nuevo reconstructor no requiere modificar el núcleo del framework, sino implementar una nueva clase que satisfaga la interfaz definida.
+    \item \textbf{Inversión de Dependencias (DIP):} Los módulos de alto nivel (el integrador temporal, el loop principal de simulación) no dependen de implementaciones concretas de solvers o reconstructores, sino de abstracciones. Esto es lo que hace posible intercambiar, por ejemplo, HLLE por HLLC mediante un archivo de configuración sin tocar el código fuente.
+\end{itemize}
+
+\subsubsection{4.2. El Patrón Strategy como Núcleo del Framework}\textbf{}
+ 
+El patrón de diseño que articula la modularidad del framework es el patrón Strategy \parencite{gamma1994design}. Este patrón define una familia de algoritmos, encapsula cada uno en una clase separada y los hace intercambiables a través de una interfaz común. En el contexto del framework, cada solver de Riemann, cada reconstructor y cada limitador de pendiente es una estrategia concreta que implementa una interfaz abstracta. El núcleo de la simulación opera exclusivamente sobre esas interfaces, sin conocer cuál estrategia concreta está siendo utilizada en un momento dado.
+La posible figura conceptual del diseño es la siguiente: existe una clase abstracta RiemannSolver con un método computeFlux(UL, UR), y clases concretas HLLESolver y HLLCSolver que la implementan. El integrador temporal recibe un puntero o referencia a RiemannSolver, y en tiempo de ejecución se le inyecta la implementación concreta elegida por el usuario. Este mismo esquema se replica para los reconstructores y los limitadores de pendiente.
+
+\subsubsection{4.3. C++ como Lenguaje de Implementación}\textbf{}
+
+La elección de C++ como lenguaje principal del framework no es arbitraria y responde a tres criterios concretos:
+
+\begin{itemize}
+    \item \textbf{Rendimiento: }Los loops sobre la malla en simulaciones 2D involucran operaciones aritméticas repetidas sobre arreglos de millones de elementos. C++ ofrece gestión de memoria determinista y acceso directo al hardware sin capas de abstracción en tiempo de ejecución, lo que se traduce en tiempos de simulación significativamente menores que lenguajes interpretados como Python \parencite{bulka2000efficient}.
+    \item \textbf{Abstracción sin costo: }El sistema de tipos de C++, con sus clases abstractas, plantillas y polimorfismo en tiempo de compilación, permite implementar el patrón Strategy descrito en la sección anterior sin penalización en rendimiento. Las llamadas a métodos virtuales en el loop interno pueden eliminarse mediante técnicas de plantillas (static polymorphism) cuando el rendimiento lo requiera.
+    \item \textbf{Extensibilidad futura: }El diseño modular adoptado permite incorporar estrategias de paralelización mediante OpenMP en una fase posterior, sin necesidad de reestructurar el código. Los loops sobre celdas de la malla son inherentemente paralelizables y la arquitectura los mantiene aislados y accesibles para esa extensión.
+\end{itemize}
+
+\subsubsection{4.4. Sistema de Configuración}\textbf{}
+
+Para que el framework funcione como un banco de pruebas genuinamente interactivo, la selección de esquemas numéricos no debe requerir recompilar el código. El sistema de configuración resuelve esto mediante archivos externos — en formato JSON o YAML — donde el usuario especifica todos los parámetros de la simulación: dimensión del dominio, condiciones iniciales, número CFL, reconstructor, limitador de pendiente, solver de Riemann y esquema temporal. El núcleo del framework lee este archivo en tiempo de ejecución e instancia las estrategias correspondientes mediante una fábrica de objetos (factory pattern), haciendo completamente transparente para el usuario la mecánica interna de la instanciación.
+
+\subsection{5. Ecosistema Tecnológico y Herramientas}
+
+Para contextualizar la contribución de este proyecto, es necesario situar el framework dentro del panorama actual de herramientas de CFD. Las soluciones predominantes pueden clasificarse en dos categorías:
+
+\textbf{Herramientas comerciales: }ANSYS Fluent es el referente industrial más consolidado. Ofrece capacidades de simulación avanzadas, interfaces gráficas maduras y soporte técnico profesional. Sin embargo, opera como una caja negra desde la perspectiva del investigador: los algoritmos internos no son accesibles, auditables ni modificables, lo que lo hace inadecuado como banco de pruebas para la comparación de esquemas numéricos \parencite{raman2018review}
+
+\textbf{Herramientas de código abierto: }OpenFOAM \parencite{jasak2009openfoam} y SU2 son los representantes más relevantes. Aunque su código fuente es accesible, ambos fueron diseñados como plataformas de producción para problemas de ingeniería complejos. Su arquitectura monolítica y altamente abstracta implica que modificar un solver de Riemann o un reconstructor requiere un esfuerzo de reingeniería considerable, con curvas de aprendizaje que pueden extenderse durante meses. Ninguno de estos sistemas fue concebido como un entorno pedagógico ni como un banco de pruebas para la comparación sistemática de esquemas numéricos elementales.
+
+Esta brecha entre las herramientas industriales opacas y la necesidad de un entorno modular, transparente y educativo es precisamente el espacio que el framework propuesto ocupa.
+
+\subsubsection{5.1. Lenguaje y Compilación}\textbf{}
+
+El núcleo computacional del framework se implementa en C++17, estándar que introduce mejoras relevantes para el diseño modular como std::variant, if constexpr y una biblioteca estándar enriquecida para la gestión de estructuras de datos. El sistema de construcción empleado es CMake, herramienta multiplataforma ampliamente adoptada en proyectos de software científico que permite gestionar dependencias, configurar opciones de compilación y generar ejecutables de forma reproducible en distintos entornos operativos (Linux, macOS, Windows).
+
+\subsubsection{5.2. Pruebas y Verificación del Código}\textbf{}
+
+La corrección del software no puede garantizarse únicamente mediante la validación física de los resultados finales. Para asegurar que cada módulo funciona correctamente de forma aislada, el framework incorpora una suite de pruebas unitarias implementadas con el framework Google Test o Catch2. Cada componente crítico el cálculo del flujo HLL, la reconstrucción MUSCL, la estimación de velocidades de onda de Einfeldt es verificado de forma independiente contra valores analíticos conocidos antes de integrarse al sistema completo. Esta práctica, conocida como test-driven development en ingeniería de software, reduce significativamente el costo de depuración y garantiza que los resultados del framework sean auditables a nivel de módulo \parencite{ramachandrappa2024solid}.
+
+\subsubsection{5.3. Visualización y Postprocesamiento}\textbf{}
+
+Los resultados numéricos de las simulaciones se exportan en formatos compatibles con herramientas estándar de visualización científica. Para casos 1D, la salida en formato CSV o texto plano permite su procesamiento directo con Python y la biblioteca matplotlib, facilitando la generación de gráficas comparativas entre distintos esquemas numéricos sobre el mismo problema de prueba. Para casos 2D, el framework exporta en formato VTK, compatible con ParaView, la elección de estos formatos de salida está directamente vinculada al sistema de configuración descrito en el Pilar 4. El archivo JSON o YAML de cada simulación incluye un bloque de parámetros de salida donde el usuario especifica el formato de exportación, la frecuencia de escritura de resultados y las variables a exportar, sin necesidad de modificar el código fuente. Esto garantiza que la cadena completa, desde la configuración del esquema numérico hasta la visualización de resultados sea reproducible y auditable a partir de un único archivo de entrada.
+
+\subsubsection{5.4. Versionamiento y Reproducibilidad}\textbf{}
+
+Un componente no negociable del ciclo de vida del software científico es el control de versiones. El framework se desarrolla bajo Git, con repositorio alojado en GitHub, lo que garantiza que cada resultado publicado pueda asociarse a una versión exacta del código que lo generó. Esta práctica responde directamente al problema de irreproducibilidad identificado en la justificación del proyecto (Mesnard y Barba, 2016): cualquier investigador o estudiante que acceda al repositorio puede reproducir exactamente las simulaciones reportadas ejecutando la misma versión del código con los mismos archivos de configuración.
+
+\subsection{6. Métricas de Verificación y Validación }
+
+En el contexto del software científico, los conceptos de verificación y validación responden a preguntas fundamentalmente distintas y complementarias. La verificación responde a la pregunta ¿estamos resolviendo las ecuaciones correctamente?, es decir, confirma que la implementación numérica es una representación fiel del modelo matemático discreto propuesto. La validación, por su parte, responde a ¿estamos resolviendo las ecuaciones correctas?, confirmando que el modelo matemático captura adecuadamente el fenómeno físico de interés \parencite{oberkampf2010verification}. En este proyecto, la verificación se realiza comparando los resultados del framework contra soluciones analíticas exactas de los problemas de Riemann, mientras que la validación se apoya en soluciones de referencia de alta fidelidad para los casos donde la solución analítica no cubre toda la complejidad del fenómeno simulado.
+
+\subsubsection{6.1. Problemas de Riemann Estándar en 1D}\textbf{}La comunidad de CFD compresible dispone de un conjunto de problemas de Riemann unidimensionales con solución analítica conocida, que constituyen la suite de verificación estándar para cualquier código basado en las ecuaciones de Euler. Los casos más relevantes para este proyecto son:
+
+\begin{itemize}
+    \item \textbf{Problema de Sod :}Es el caso de referencia universal. Consiste en dos estados de gas en reposo separados por una membrana, con el lado izquierdo a mayor presión y densidad. Su solución involucra simultáneamente las tres estructuras ondulatorias fundamentales: una onda de choque, una discontinuidad de contacto y una onda de rarefacción. Por esta razón es el primer caso que debe superar cualquier implementación nueva.
+
+    \item \textbf{Problema de Lax: }Variante con mayor contraste entre estados iniciales que el problema de Sod, lo que genera ondas más intensas y exige mayor robustez al solver. Es especialmente útil para evaluar la difusión numérica en la discontinuidad de contacto.
+
+    \item \textbf{Problema 123 (dos rarefacciones): }Caso con dos ondas de rarefacción que se alejan entre sí, generando una región de baja densidad en el centro del dominio. Es un caso de prueba crítico para verificar que el solver mantiene la positividad de la densidad y la presión, condición que esquemas poco robustos pueden violar.
+
+    \item \textbf{Caso de doble choque: }Dos ondas de choque que se aproximan entre sí, generando presiones y densidades extremadamente altas en la región central. Es el caso más exigente en términos de robustez numérica y permite diferenciar claramente el comportamiento del HLLE frente al HLLC en condiciones límite.
+
+\end{itemize}
+
+\subsubsection{6.2. Casos de Referencia en 2D}
+
+Para la validación en dos dimensiones, donde la solución analítica exacta no siempre está disponible, se emplean problemas de referencia ampliamente documentados en la literatura:
+
+\begin{itemize}
+    \item \textbf{Problema de Riemann 2D de Lax-Liu: }Conjunto de diecinueve configuraciones iniciales con cuatro estados constantes en los cuadrantes del dominio, cuyas soluciones de referencia fueron documentadas sistemáticamente por Lax y Liu (1998). Permiten verificar el comportamiento del framework ante interacciones complejas de ondas en dos dimensiones.
+
+    \item \textbf{Reflexión de Mach (Mach reflection): }Un choque fuerte incide sobre una rampa, generando una estructura de reflexión compleja con un choque de Mach, un choque reflejado y una capa de mezcla. Es un caso de validación clásico en CFD compresible 2D cuya solución de referencia está bien establecida en la literatura (Woodward y Colella, 1984).
+    
+\end{itemize}
+
+\subsubsection{6.3. Normas de Error}\textbf{}
+
+La diferencia entre la solución numérica $U_{h}$ y la solución de referencia $U_{ref}$ se cuantifica mediante normas de error estándar. Para una malla de $N$ celdas, las normas L1 y L2 se definen como:
+
+\begin{equation}
+    \lvert\lvert e \rvert\rvert_{L1} = \frac{1}{N}\sum_{i=1}^{N} \lvert U_{h}^{i} - U_{ref}^{i}\rvert
+\end{equation}
+
+\begin{equation}
+    \lvert\lvert e \rvert\rvert_{L2} = \sqrt{\frac{1}{N}\sum_{i=1}^{N} {\lvert U_{h}^{i} - U_{ref}^{i}\rvert}^{2}}
+\end{equation}
+
+La norma L1 es la métrica preferida en problemas con discontinuidades porque es menos sensible a errores puntuales grandes localizados cerca de los saltos, ofreciendo una medida más representativa del error global de la simulación \parencite{toro2013riemann}. La norma L2 complementa el análisis siendo más sensible a errores de mayor magnitud, útil para detectar problemas de robustez en casos extremos.
+
+\subsubsection{6.4. Análisis de Convergencia}\textbf{}
+
+La verificación más rigurosa de una implementación numérica no es un único valor de error, sino el análisis de convergencia: al refinar sistemáticamente la malla, el error debe decrecer a la tasa teórica esperada según el orden del esquema. Para un esquema de orden $p$, se espera que:
+
+\begin{equation}
+    \lvert\lvert e \rvert\rvert_{L1} \sim \mathcal{O}(\Delta x^p)
+\end{equation}
+
+En la práctica, esto se verifica calculando el error en una secuencia de mallas con resoluciones $\Delta x$, $\Delta x$/2, $\Delta x$/4, y estimando el orden de convergencia observado $p_{obs}$ como:
+
+\begin{equation}
+    p_{obs} = log_{2}(\frac{\parallel e(\Delta x)\parallel_{L1}}{\parallel e(\Delta x/2)\parallel_{L1}}
+\end{equation}
+
+Un valor de $p_{obs}$ cercano al orden teórico del esquema 1 para reconstrucción constante, 2 para MUSCL, 3 o superior para WENO, constituye la evidencia más sólida de que la implementación es correcta. Este análisis se realizará para cada combinación de reconstructor y solver implementada en el framework, generando una matriz de resultados que forma el núcleo del banco de pruebas propuesto.
+
+\clearpage
+
+\chapter{Metodología}
+
+Este proyecto se enmarca en la modalidad de investigación aplicada con desarrollo de software, cuyo propósito es construir un artefacto computacional concreto, el framework y demostrar su corrección y utilidad mediante validación sistemática. A diferencia de una investigación puramente teórica, el producto principal no es una proposición matemática sino un sistema de software funcional, documentado y reproducible, cuya calidad se evalúa tanto por criterios de ingeniería (modularidad, extensibilidad, claridad del código) como por criterios físicos (precisión numérica, captura correcta de discontinuidades, orden de convergencia observado).
+
+El desarrollo sigue un enfoque incremental y verificado: cada módulo del framework se implementa, se somete a pruebas unitarias y se verifica de forma aislada antes de integrarse al sistema completo. Esta estrategia reduce el costo de depuración, garantiza que los errores se detecten en el módulo que los origina y produce un sistema cuya corrección puede auditarse componente por componente.
+
+\subsection{Etapa 1: Revisión Bibliográfica y Diseño de la Arquitectura}
+
+La primera etapa tiene un carácter predominantemente analítico y de diseño. Se llevará a cabo una revisión sistemática de la literatura sobre métodos numéricos para flujos compresibles, con énfasis en el método de volúmenes finitos, los esquemas de reconstrucción de alta resolución y los solvers de Riemann aproximados de la familia HLL. Paralelamente, se analizarán las arquitecturas de software de herramientas existentes como OpenFOAM y SU2, con el objetivo de identificar patrones de diseño aplicables y antipatrones que el framework debe evitar.
+Con base en esta revisión, se procederá al diseño formal de la arquitectura del sistema. Este diseño se materializará en un diagrama de componentes que especifica los módulos del framework, sus responsabilidades y los contratos de sus interfaces. Las interfaces abstractas fundamentales RiemannSolver, Reconstructor, TimeIntegrator y Mesh quedarán completamente definidas antes de iniciar cualquier implementación, garantizando que las decisiones de diseño no estén condicionadas por detalles de implementación posteriores. Esta etapa concluye con una revisión interna de la arquitectura por parte de ambos autores y el director del proyecto.
+
+\subsection{Etapa 2: Implementación Incremental del Núcleo Computacional}
+
+La segunda etapa constituye el núcleo del trabajo de desarrollo y se ejecuta de forma incremental siguiendo el orden lógico de dependencias entre módulos. El proceso parte de los componentes más fundamentales: la estructura de malla y las condiciones de contorno y avanza progresivamente hacia los componentes de mayor complejidad algorítmica.
+Cada módulo sigue el siguiente ciclo de desarrollo antes de considerarse completo: primero se implementa la clase concreta respetando la interfaz abstracta definida en la etapa anterior; luego se escriben pruebas unitarias que verifican el comportamiento del módulo contra valores analíticos conocidos; finalmente, una vez que las pruebas unitarias pasan satisfactoriamente, el módulo se integra al sistema. Los módulos se desarrollan en el siguiente orden: estructura de malla 1D y 2D con celdas fantasma, condiciones de contorno, formulación conservativa de las ecuaciones de Euler y loop principal del FVM, esquemas de reconstrucción (orden 1, MUSCL y WENO) con sus respectivos limitadores de pendiente, solvers de Riemann (HLLE y HLLC), integrador temporal Runge-Kutta con condición CFL, y sistema de configuración mediante archivos externos.
+La integración completa del sistema se verifica mediante un caso de humo (smoke test): la simulación del problema de Sod en 1D con cada combinación de reconstructor y solver disponible, comprobando que el sistema produce resultados físicamente coherentes antes de proceder a la validación formal.
+
+\subsection{Etapa 3: Validación y Experimentación Numérica}
+
+La tercera etapa evalúa la corrección física del framework y demuestra su utilidad como banco de pruebas mediante la ejecución sistemática de un conjunto de problemas de referencia. La validación se estructura en dos niveles.
+En el nivel de verificación, se ejecutan los problemas de Riemann estándar en 1D Sod, Lax, problema 123 y doble choque comparando los resultados numéricos contra sus soluciones analíticas exactas mediante las normas de error L1 y L2. Para cada esquema se realiza además un análisis de convergencia refinando sistemáticamente la malla y estimando el orden de convergencia observado, que debe aproximarse al orden teórico de cada reconstructor.
+
+En el nivel de validación, se ejecutan casos de referencia en 2D el problema de Riemann bidimensional de Lax-Liu y la reflexión de Mach comparando los resultados contra soluciones de referencia de alta fidelidad reportadas en la literatura. Los resultados de ambos niveles se presentan en tablas de error y gráficas comparativas que permiten aislar y cuantificar el impacto de cada elección algorítmica sobre la calidad de la simulación, demostrando así la utilidad del framework como herramienta de experimentación numérica.
+
+\subsection{Etapa 4: Documentación Técnica y Pedagógica}
+
+La cuarta etapa se solapa intencionalmente con el final de la etapa de validación, aprovechando que los casos de prueba validados se convierten directamente en el material de los tutoriales. La documentación se desarrolla en dos vertientes paralelas.
+La documentación técnica, dirigida a desarrolladores, describe la arquitectura del sistema, los contratos de cada interfaz, las guías para extender el framework con nuevos solvers o reconstructores, y la suite de pruebas unitarias. La documentación pedagógica, dirigida a estudiantes y usuarios, comprende un manual de instalación, tutoriales progresivos desde el problema de Sod en 1D hasta casos 2D, y archivos de configuración de ejemplo para cada caso de prueba. Ambas vertientes se revisan cruzadamente por los dos autores para garantizar consistencia y claridad antes de la entrega final.
+
+Como actividad de cierre, se realizará una verificación de reproducibilidad consistente en ejecutar el framework completamente desde cero; instalación, configuración y simulación, siguiendo únicamente la documentación de usuario, sin intervención de los autores. Esta prueba garantiza que el artefacto entregado es autónomo y que cualquier usuario externo puede reproducir los resultados reportados a partir del repositorio público y los archivos de configuración incluidos.
+
+\chapter{Cronograma}
+
+\begin{landscape}
+\small
+\begin{longtable}{|p{5cm}|*{16}{c|}}
+\hline
+\rowcolor{gray!30}
+\textbf{Actividad} & 
+\textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & 
+\textbf{6} & \textbf{7} & \textbf{8} & \textbf{9} & \textbf{10} & 
+\textbf{11} & \textbf{12} & \textbf{13} & \textbf{14} & \textbf{15} & 
+\textbf{16} \\
+\hline
+\endfirsthead
+\hline
+\rowcolor{gray!30}
+\textbf{Actividad} & 
+\textbf{1} & \textbf{2} & \textbf{3} & \textbf{4} & \textbf{5} & 
+\textbf{6} & \textbf{7} & \textbf{8} & \textbf{9} & \textbf{10} & 
+\textbf{11} & \textbf{12} & \textbf{13} & \textbf{14} & \textbf{15} & 
+\textbf{16} \\
+\hline
+\endhead
+
+% ETAPA 1
+\rowcolor{blue!15}
+\multicolumn{17}{|l|}{\textbf{ETAPA 1 --- Revisión del estado del arte 
+y diseño de la arquitectura (OE1)}} \\
+\hline
+
+Revisión bibliográfica de métodos numéricos para flujos compresibles 
+(FVM, reconstructores, solvers de Riemann) &
+\cellcolor{blue!40} & \cellcolor{blue!40} & & & & & & & & & & & & & & \\
+\hline
+
+Análisis de arquitecturas de software existentes (OpenFOAM, SU2) &
+\cellcolor{blue!40} & \cellcolor{blue!40} & & & & & & & & & & & & & & \\
+\hline
+
+Definición de interfaces abstractas del framework 
+(\texttt{RiemannSolver}, \texttt{Reconstructor}, 
+\texttt{TimeIntegrator}, \texttt{Mesh}) &
+& \cellcolor{blue!40} & \cellcolor{blue!40} & & & & & & & & & & & & & \\
+\hline
+
+Elaboración del diagrama de componentes y relaciones entre módulos &
+& & \cellcolor{blue!40} & & & & & & & & & & & & & \\
+\hline
+
+Diseño del sistema de configuración (JSON/YAML) y 
+revisión interna de la arquitectura &
+& & \cellcolor{blue!40} & & & & & & & & & & & & & \\
+\hline
+
+% ETAPA 2
+\rowcolor{green!15}
+\multicolumn{17}{|l|}{\textbf{ETAPA 2 --- Implementación incremental 
+del núcleo computacional (OE2)}} \\
+\hline
+
+Implementación de la estructura de malla 1D y 2D con celdas fantasma 
+y condiciones de contorno &
+& & & \cellcolor{green!40} & \cellcolor{green!40} & & & & & & & & & & & \\
+\hline
+
+Implementación de la formulación conservativa de las ecuaciones de 
+Euler y loop principal del FVM &
+& & & & \cellcolor{green!40} & \cellcolor{green!40} & & & & & & & & & & \\
+\hline
+
+Implementación del esquema de reconstrucción de orden 1 y 
+verificación unitaria &
+& & & & & \cellcolor{green!40} & & & & & & & & & & \\
+\hline
+
+Implementación del esquema MUSCL con limitadores de pendiente y 
+verificación unitaria &
+& & & & & & \cellcolor{green!40} & \cellcolor{green!40} & & & & & & & & \\
+\hline
+
+Implementación del esquema WENO de orden 3 y verificación unitaria &
+& & & & & & & \cellcolor{green!40} & \cellcolor{green!40} & & & & & & & \\
+\hline
+
+Implementación del solver HLLE y verificación unitaria &
+& & & & & & & & \cellcolor{green!40} & & & & & & & \\
+\hline
+
+Implementación del solver HLLC y verificación unitaria &
+& & & & & & & & \cellcolor{green!40} & \cellcolor{green!40} & & & & & & \\
+\hline
+
+Implementación del integrador temporal Runge-Kutta con condición CFL &
+& & & & & & & & & \cellcolor{green!40} & & & & & & \\
+\hline
+
+Integración completa del sistema y caso de humo 
+(problema de Sod en 1D) &
+& & & & & & & & & \cellcolor{green!40} & & & & & & \\
+\hline
+
+% ETAPA 3
+\rowcolor{orange!15}
+\multicolumn{17}{|l|}{\textbf{ETAPA 3 --- Validación y banco de 
+pruebas (OE3)}} \\
+\hline
+
+Ejecución y análisis de problemas de Riemann estándar en 1D 
+(Sod, Lax, problema 123, doble choque) &
+& & & & & & & & & & \cellcolor{orange!40} & \cellcolor{orange!40} & & & & \\
+\hline
+
+Cálculo de normas de error L1 y L2 y análisis de convergencia 
+por esquema &
+& & & & & & & & & & \cellcolor{orange!40} & \cellcolor{orange!40} & & & & \\
+\hline
+
+Ejecución de casos de referencia en 2D (Lax-Liu, reflexión de Mach) &
+& & & & & & & & & & & \cellcolor{orange!40} & \cellcolor{orange!40} & & & \\
+\hline
+
+Generación de gráficas comparativas (matplotlib, ParaView) &
+& & & & & & & & & & & & \cellcolor{orange!40} & & & \\
+\hline
+
+% ETAPA 4
+\rowcolor{violet!15}
+\multicolumn{17}{|l|}{\textbf{ETAPA 4 --- Documentación técnica y 
+pedagógica (OE4)}} \\
+\hline
+
+Redacción de documentación técnica: arquitectura, interfaces y 
+guías de extensión &
+& & & & & & & & & & & \cellcolor{violet!40} & \cellcolor{violet!40} & \cellcolor{violet!40} & & \\
+\hline
+
+Redacción de manual de instalación y tutoriales progresivos 
+(1D a 2D) con archivos de configuración de ejemplo &
+& & & & & & & & & & & & \cellcolor{violet!40} & \cellcolor{violet!40} & \cellcolor{violet!40} & \\
+\hline
+
+Revisión cruzada de toda la documentación por ambos autores &
+& & & & & & & & & & & & & & \cellcolor{violet!40} & \\
+\hline
+
+% ETAPA 5
+\rowcolor{red!15}
+\multicolumn{17}{|l|}{\textbf{ETAPA 5 --- Cierre y entrega}} \\
+\hline
+
+Revisión final del código, documentación y repositorio GitHub &
+& & & & & & & & & & & & & & \cellcolor{red!40} & \cellcolor{red!40} \\
+\hline
+
+Verificación de reproducibilidad desde cero siguiendo 
+la documentación de usuario &
+& & & & & & & & & & & & & & \cellcolor{red!40} & \cellcolor{red!40} \\
+\hline
+
+Preparación de la presentación y entrega del documento final &
+& & & & & & & & & & & & & & & \cellcolor{red!40} \\
+\hline
+
+\end{longtable}
+\end{landscape}
+
+\textit{Nota: La Etapa 4 se inicia en la semana 12, solapándose con el cierre de la Etapa 3, dado que los casos de prueba validados se incorporan directamente como material de los tutoriales de la documentación de usuario.}
+
+\chapter{Presupuesto}
+
+\begin{table}[htbp]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|c|}
+    \hline\multicolumn{2}{|c|}{\textbf{Descripcion}} & \textbf{Responsable} & \textbf{Valor Unitario(\$/h)} & \textbf{Cantidad(h)} & \textbf{Total} \\
+    \hline \multirow{4}{*}{\begin{tabular}{@{}c@{}} Recurso \\ Humano \end{tabular}} & Dr. Jorge Villamizar & UIS & \$300.000 & 40 & \$12.000.000 \\
+    \cline{2-6} & Ph.D. Lola Bautista & UIS & \$300.000 & 40 & \$12.000.000 \\
+    \cline{2-6} & M.Sc. Oswaldo Nieto & UIS & \$300.000 & 40 & \$12.000.000 \\
+    \cline{2-6} & Gabriel Chavarro & Autor & \$12.500 & 780 & \$9.750.000 \\
+    \cline{2-6} & Edgar Ariza & Autor & \$12.500 & 780 & \$9.750.000 \\
+    \hline \multirow{4}{*}{\begin{tabular}{@{}c@{}} Gastos \\ tecnológicos \end{tabular}} & Equipo de cómputo & UIS & \$200 & 780 & \$156.000 \\
+    \cline{2-6} & Luz & UIS & \$300 & 780 & \$234.000 \\
+    \cline{2-6} & Internet & UIS & \$120 & 780 & \$93.600 \\
+    \hline\multicolumn{2}{|c|}{\textbf{Descripcion}} & \textbf{Responsable} & \textbf{Valor Unitario} & \textbf{Cantidad} & \textbf{} \\
+    \hline \multirow{2}{*}{\begin{tabular}{@{}c@{}} Otros \\ gastos \end{tabular}} & Transporte & Autor & \$400.000 & 2 & \$800.000 \\
+    \cline{2-6} & Papeleria & UIS & \$100 & 100 & \$100.000 \\
+    \cline{2-6} & Papeleria & UIS & \$100 & 100 & \$100.000 \\
+    \hline\multicolumn{5}{|c|}{\textbf{TOTAL}} & \$5.6983.600 \\
+    \hline    
+    \end{tabular}
+    \caption{Presupuesto}
+    \label{tab:name}
+\end{table}
+
+
+
+
+\printbibliography
+
+\end{document}
