@@ -230,7 +230,7 @@ cuantificar, mediante normas de error y orden de convergencia, el efecto de cada
 combinación sobre la captura de choques y discontinuidades de contacto, con
 resultados reproducibles?
 
-\pendiente{Alinear esta pregunta con los objetivos específicos vigentes (más abajo). El OE2 recortado no lista WENO ni HLLE. O se amplían los objetivos, o se estrecha la pregunta (p.\ ej.\ HLL/HLLC + MUSCL en 1D, con 2D/WENO/HLLE como extensión). No se reescribe aquí para no adelantar esa decisión del equipo.}
+\corregidomenor{Alineación pregunta--objetivos--cronograma (radicación): los objetivos específicos vigentes pasan a ser los redactados con producto observable (WENO, HLLE/HLLC, L1/L2, documentación dual), que son los que ya coincidían con esta pregunta y con el Gantt. Los OE recortados no se eliminan: quedan documentados en rojo en el capítulo de Objetivos.}
 
 % -----------------------------------------------------------------------------
 \subsection*{Justificación}
@@ -250,18 +250,41 @@ documentación, de modo que el producto sea extensible, por ejemplo hacia otros
 sistemas de ecuaciones o hacia estrategias de paralelización.
 
 % -----------------------------------------------------------------------------
-\subsection*{Delimitación}
+\subsection*{Antecedentes de trabajo propio (estado al radicar)}
 
+Al momento de este plan ya existe un núcleo unidimensional en C++20, validado
+frente al código Fortran de referencia, con volúmenes finitos, reconstrucción
+MUSCL, limitadores, solvers HLL y HLLC, integrador SSP-RK2, condición CFL y
+salida comparable. Ese trabajo \textbf{no} sustituye los objetivos del
+proyecto: el entregable de grado sigue siendo el \textit{framework} 1D/2D
+alineado con la pregunta de investigación. En el cronograma, las celdas de las
+semanas 1--10 se leen como diseño, documentación de arquitectura, extensión a
+2D, WENO, HLLE y banco de pruebas, no como si el 1D partiera de cero.
+
+% La subsección Delimitación del director se retiró del cuerpo vigente a
+% petición del equipo (2026-10-08). El texto no se borra: está comentado aquí
+% y se reproduce en rojo en el bloque de borrador anterior.
+%
+% \subsection*{Delimitación}
+% El trabajo se limita a las ecuaciones de Euler para gas ideal, sin viscosidad ni
+% conducción de calor, en una y dos dimensiones sobre mallas cartesianas
+% uniformes. Quedan fuera las ecuaciones de Navier--Stokes, la turbulencia, las
+% geometrías complejas, los mallados no estructurados, las tres dimensiones y la
+% paralelización, que se contemplan como trabajo futuro.
+
+\end{textovigente}
+% =============================================================================
+
+\begin{borradorretirado}
+
+\noindent\textbf{Delimitación (propuesta del director; comentada / no vigente).}
 El trabajo se limita a las ecuaciones de Euler para gas ideal, sin viscosidad ni
 conducción de calor, en una y dos dimensiones sobre mallas cartesianas
 uniformes. Quedan fuera las ecuaciones de Navier--Stokes, la turbulencia, las
 geometrías complejas, los mallados no estructurados, las tres dimensiones y la
 paralelización, que se contemplan como trabajo futuro.
 
-\end{textovigente}
-% =============================================================================
-
-\begin{borradorretirado}
+\bigskip
 
 La dinámica de fluidos computacional (CFD) es un pilar importante en ingeniería y ciencias físicas \parencite{raman2018review}, ya que permite simular fenómenos complejos como ondas de choque y flujos turbulentos mediante la resolución numérica de ecuaciones como las de Euler \parencite{toro2013riemann}, la precisión de estas simulaciones depende críticamente de la elección de algoritmos numéricos discretos (reconstructores \parencite{berthon2005stability}, solvers de Riemann, esquemas temporales), por ello, comprender el impacto de cada elección algorítmica no es un detalle de implementación, sino un requisito para la investigación rigurosa y el diseño confiable.
 
@@ -312,24 +335,32 @@ Diseñar e implementar un framework computacional modular mediante los métodos 
 
 \section{Objetivos Específicos}
 
-\begin{itemize}{\color{red}
-    % \item Diseñar una arquitectura de software modular para el framework, fundamentada en principios de diseño orientado a objetos y patrones estructurales, que desacople los componentes numéricos fundamentales (malla, reconstructor, solver de Riemann, integrador temporal) mediante interfaces bien definidas. Como producto de este objetivo se obtendrá un diagrama de componentes con sus contratos de interfaz, y un mecanismo de configuración que permita orquestar y combinar distintos esquemas numéricos sin modificar el código fuente.
+\begin{textovigente}
+\noindent Los cuatro ítems siguientes son los vigentes: coinciden con la pregunta de investigación (constante / MUSCL / WENO, HLLE, HLLC, normas L1 y L2, 1D y 2D) y con las filas del cronograma.
+\begin{itemize}
+    \item Diseñar una arquitectura de software modular para el framework, fundamentada en principios de diseño orientado a objetos y patrones estructurales, que desacople los componentes numéricos fundamentales (malla, reconstructor, solver de Riemann, integrador temporal) mediante interfaces bien definidas. Como producto de este objetivo se obtendrá un diagrama de componentes con sus contratos de interfaz, y un mecanismo de configuración que permita orquestar y combinar distintos esquemas numéricos sin modificar el código fuente.
 
-    \item  Diseñar una arquitectura de software modular para el framework, fundamentada en principios de diseño orientado a objetos y patrones estructurales, que permita desacoplar los componentes numéricos fundamentales mediante interfaces bien definidas.
+    \item Implementar en C++ el núcleo computacional del framework sobre dominios estructurados 1D y 2D, que comprenda: una malla computacional para ambas dimensiones, la formulación conservativa de las ecuaciones de Euler mediante el método de volúmenes finitos, tres esquemas de reconstrucción (orden 1 constante, orden 2 MUSCL y orden 3+ WENO), al menos dos solvers de Riemann aproximados (HLLE y HLLC), y un esquema de integración temporal explícito con control de paso de tiempo mediante la condición CFL. La implementación priorizará la corrección, la claridad del código y la modularidad como base para extensiones futuras.
+
+    \item Validar la corrección física del framework mediante la simulación de un conjunto de problemas de Riemann estandarizados en 1D (incluyendo el problema de Sod como caso de referencia base) y al menos un caso en 2D. Los resultados se cuantificarán con las normas de error L1 y L2 frente a soluciones analíticas o de referencia de alta fidelidad, y se utilizarán para demostrar explícitamente el impacto de distintas combinaciones de reconstructor y solver sobre la precisión y el comportamiento numérico en un mismo problema.
+
+    \item Elaborar una documentación dual que comprenda: una documentación técnica dirigida a desarrolladores, con descripción de la arquitectura, las interfaces de programación y guías de extensión del código; y una documentación de usuario de carácter pedagógico, que incluya un manual de instalación, tutoriales progresivos desde casos 1D hasta casos 2D, y archivos de configuración de ejemplo para cada caso de prueba, facilitando la adopción del framework como herramienta de enseñanza de CFD desde sus fundamentos computacionales.
+\end{itemize}
+\end{textovigente}
+
+\begin{borradorretirado}
+\noindent\textbf{Objetivos específicos recortados (versión previa; no vigentes).}
+No se eliminan. Quedaron cortos respecto de la pregunta (no nombran WENO ni HLLE ni las normas).
+\begin{itemize}
+    \item Diseñar una arquitectura de software modular para el framework, fundamentada en principios de diseño orientado a objetos y patrones estructurales, que permita desacoplar los componentes numéricos fundamentales mediante interfaces bien definidas.
 
     \item Implementar en C++ el núcleo computacional del framework para la resolución numérica de las ecuaciones de Euler mediante el método de volúmenes finitos en dominios estructurados unidimensionales y bidimensionales, incorporando diferentes esquemas de reconstrucción, solvers de Riemann y métodos de integración temporal.
 
     \item Validar la precisión y el comportamiento numérico del framework mediante la simulación de problemas de referencia para las ecuaciones de Euler en dominios unidimensionales y bidimensionales.
 
     \item Elaborar documentación técnica y pedagógica del framework que facilite su desarrollo, extensión, instalación y utilización como herramienta de apoyo para la enseñanza de dinámica de fluidos computacional.
-    
-    % \item Implementar en C++ el núcleo computacional del framework sobre dominios estructurados 1D y 2D, que comprenda: una malla computacional para ambas dimensiones, la formulación conservativa de las ecuaciones de Euler mediante el método de volúmenes finitos, tres esquemas de reconstrucción (orden 1 constante, orden 2 MUSCL y orden 3+ WENO), al menos dos solvers de Riemann aproximados (HLLE y HLLC), y un esquema de integración temporal explícito con control de paso de tiempo mediante la condición CFL. La implementación priorizará la corrección, la claridad del código y la modularidad como base para extensiones futuras.
-
-    % \item Validar la corrección física del framework mediante la simulación de un conjunto de problemas de Riemann estandarizados en 1D (incluyendo el problema de Sod como caso de referencia base) y al menos un caso en 2D. Los resultados se cuantificarán con las normas de error L1 y L2 frente a soluciones analíticas o de referencia de alta fidelidad, y se utilizarán para demostrar explícitamente el impacto de distintas combinaciones de reconstructor y solver sobre la precisión y el comportamiento numérico en un mismo problema.
-
-    % \item Elaborar una documentación dual que comprenda: una documentación técnica dirigida a desarrolladores, con descripción de la arquitectura, las interfaces de programación y guías de extensión del código; y una documentación de usuario de carácter pedagógico, que incluya un manual de instalación, tutoriales progresivos desde casos 1D hasta casos 2D, y archivos de configuración de ejemplo para cada caso de prueba, facilitando la adopción del framework como herramienta de enseñanza de CFD desde sus fundamentos computacionales.
-    
 \end{itemize}
+\end{borradorretirado}
 
 \chapter{Marco Teorico}
 
@@ -809,8 +840,58 @@ Preparación de la presentación y entrega del documento final &
 
 \textit{Nota: La Etapa 4 se inicia en la semana 12, solapándose con el cierre de la Etapa 3, dado que los casos de prueba validados se incorporan directamente como material de los tutoriales de la documentación de usuario.}
 
+\begin{textovigente}
+\noindent\textit{Lectura del Gantt al radicar.} La tabla de 16 semanas \textbf{no se modifica}: sigue siendo el plan de trabajo del grado y coincide con los OE vigentes (WENO, HLLE, HLLC, 2D, JSON/YAML). Las semanas 1--5 cubren diseño e interfaces; el núcleo 1D ya existente se documenta y se reutiliza, no se vuelve a implementar desde cero. \pendiente{Sustituir ``semana 1--16'' por fechas de calendario del semestre de matrícula del TG, según el instructivo de la Escuela.}
+\end{textovigente}
+
 \chapter{Presupuesto}
 
+\begin{textovigente}
+\noindent Suma aritmética de los renglones originales: recurso humano \$55.500.000 + gastos tecnológicos \$483.600 + transporte \$800.000 + papelería (dos renglones del borrador) \$200.000 = \textbf{\$56.983.600}. El total escrito antes (\$5.6983.600) era un error de notación, no de tarifas. Las horas de dirección se registran como \textbf{contrapartida UIS}; las de los autores como contrapartida de los estudiantes. \pendiente{Confirmar con la Escuela si las tarifas de director/codirectores deben ir en esta tabla o solo en carta de aval.}
+\begin{table}[htbp]
+    \centering
+    \small
+    \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    \multicolumn{2}{|c|}{\textbf{Descripción}} & \textbf{Fuente} & \textbf{Unitario} & \textbf{Cant.} & \textbf{Total} \\
+    \hline
+    \multirow{5}{*}{\begin{tabular}{@{}c@{}}Recurso\\humano\end{tabular}}
+      & Dr.\ Jorge Villamizar & UIS & \$300.000/h & 40 h & \$12.000.000 \\
+    \cline{2-6}
+      & Ph.D.\ Lola Bautista & UIS & \$300.000/h & 40 h & \$12.000.000 \\
+    \cline{2-6}
+      & M.Sc.\ Oswaldo Nieto & UIS & \$300.000/h & 40 h & \$12.000.000 \\
+    \cline{2-6}
+      & Gabriel Chavarro & Autores & \$12.500/h & 780 h & \$9.750.000 \\
+    \cline{2-6}
+      & Edgar Ariza & Autores & \$12.500/h & 780 h & \$9.750.000 \\
+    \hline
+    \multirow{3}{*}{\begin{tabular}{@{}c@{}}Gastos\\tecnológicos\end{tabular}}
+      & Equipo de cómputo & UIS & \$200/h & 780 h & \$156.000 \\
+    \cline{2-6}
+      & Luz & UIS & \$300/h & 780 h & \$234.000 \\
+    \cline{2-6}
+      & Internet & UIS & \$120/h & 780 h & \$93.600 \\
+    \hline
+    \multirow{3}{*}{\begin{tabular}{@{}c@{}}Otros\\gastos\end{tabular}}
+      & Transporte & Autores & \$400.000 & 2 & \$800.000 \\
+    \cline{2-6}
+      & Papelería & UIS & \$100 & 100 & \$100.000 \\
+    \cline{2-6}
+      & Papelería (renglón 2 del borrador) & UIS & \$100 & 100 & \$100.000 \\
+    \hline
+    \multicolumn{5}{|c|}{\textbf{TOTAL}} & \textbf{\$56.983.600} \\
+    \hline
+    \multicolumn{5}{|l|}{Contrapartida UIS: \$36.683.600 \quad Contrapartida autores: \$20.300.000} & \\
+    \hline
+    \end{tabular}
+    \caption{Presupuesto (vigente; misma canasta de renglones, total corregido)}
+    \label{tab:presupuesto}
+\end{table}
+\end{textovigente}
+
+\begin{borradorretirado}
+\noindent\textbf{Tabla de presupuesto anterior.} No se borra. El total \$5.6983.600 no cuadra; \texttt{multirow} de personal era 4 con 5 filas; papelería estaba duplicada (se conservó en la tabla vigente para no alterar la canasta).
 \begin{table}[htbp]
     \centering
     \begin{tabular}{|c|c|c|c|c|c|}
@@ -828,15 +909,60 @@ Preparación de la presentación y entrega del documento final &
     \cline{2-6} & Papeleria & UIS & \$100 & 100 & \$100.000 \\
     \cline{2-6} & Papeleria & UIS & \$100 & 100 & \$100.000 \\
     \hline\multicolumn{5}{|c|}{\textbf{TOTAL}} & \$5.6983.600 \\
-    \hline    
+    \hline
     \end{tabular}
-    \caption{Presupuesto}
-    \label{tab:name}
+    \caption{Presupuesto (borrador anterior)}
+    \label{tab:presupuesto-borrador}
 \end{table}
+\end{borradorretirado}
 
+\clearpage
+\chapter{Alcance, resultados esperados y notas de formato (Escuela)}
 
+\begin{textovigente}
+\noindent Este capítulo no sustituye la plantilla oficial de la Escuela de Ingeniería de Sistemas e Informática. Recoge los bloques que el comité suele pedir y que el plan aún no tenía como capítulo propio. \pendiente{Cruzar con el instructivo vigente del Comité de Trabajos de Grado (EISI--UIS) y, si existe plantilla .docx/.tex, migrar portada, márgenes y fuente.}
 
+\subsection*{Alcance}
+Framework compacto en C++ para las ecuaciones de Euler 1D y 2D en mallas cartesianas, con reconstrucción constante, MUSCL y WENO, solvers HLLE y HLLC, integrador Runge--Kutta explícito con CFL, configuración externa sin recompilar, y verificación con normas L1/L2 y convergencia. Fuera de alcance (trabajo futuro, no se borra de la discusión): Navier--Stokes, turbulencia, mallas no estructuradas, 3D y paralelización.
 
-\printbibliography
+\subsection*{Resultados esperados (entregables)}
+\begin{itemize}
+    \item Repositorio versionado (código, pruebas, archivos de configuración de cada caso).
+    \item Diagrama de componentes e interfaces (\texttt{Mesh}, \texttt{Reconstructor}, \texttt{RiemannSolver}, \texttt{TimeIntegrator}).
+    \item Núcleo 1D y 2D ejecutable, con al menos Sod en 1D y un caso 2D de referencia.
+    \item Tablas de error L1/L2 y, donde aplique, orden de convergencia observado.
+    \item Manual técnico (extensión) y manual de usuario (instalación y tutoriales 1D $\rightarrow$ 2D).
+\end{itemize}
+
+\subsection*{Calendario}
+El Gantt se expresa en 16 semanas lectivas. Las fechas civiles (inicio/fin de semestre, corte de radicación) se llenan cuando la Escuela fije el periodo de matrícula del TG.
+
+\subsection*{Consideraciones éticas y de propiedad}
+No se recogen datos de personas. El producto es software de investigación; la licencia del repositorio (p.\ ej.\ MIT o GPLv3) se declarará en la entrega final. Las citas siguen APA 7 vía biblatex.
+\end{textovigente}
+
+\clearpage
+\chapter{Referencias bibliográficas}
+
+\thispagestyle{fancy}
+\fancyhf{}
+  \lhead{REFERENCIAS BIBLIOGRÁFICAS} \chead{} \rhead{\thepage}
+    \lfoot{}{} \cfoot{} \rfoot{}
+    \renewcommand{\headrulewidth}{0pt}
+  \renewcommand{\footrulewidth}{0pt}
+
+\singlespacing
+
+\begin{textovigente}
+\noindent\textbf{Uso para radicación.} Las fuentes \emph{primarias} son las que sostienen el problema, la verificación y el contraste con software existente \parencite{toro2009,leveque2002,liska2003,mesnard2017,oberkampf2010,wilson2014,mandli2016,stone2020,economon2016,jasak2009}. Toro se cita como 3.\textsuperscript{a} ed.\ (2009); la clave \texttt{toro2013riemann} del borrador se conserva y se lista como complementaria. Mesnard y Barba: preferir el artículo de revista 2017; el preprint 2016 permanece por las citas del borrador.
+\end{textovigente}
+
+\printbibliography[heading=subbibliography,title={Fuentes primarias},keyword=primaria]
+
+\begin{borradorretirado}
+\noindent Las entradas siguientes \textbf{no se eliminan}. Varias son tesis, revistas de baja visibilidad o registros incompletos (p.\ ej.\ Kong 2011, Raman 2018, Berthon sin revista). Siguen en el .bib porque el borrador original las citaba.
+\end{borradorretirado}
+
+\printbibliography[heading=subbibliography,title={Fuentes del borrador original y complementarias},keyword=complementaria]
 
 \end{document}
